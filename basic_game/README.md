@@ -1,5 +1,4 @@
-![](https://tinypic.host/images/2024/01/31/icon.png){height='180px'}
-![](https://tinypic.host/images/2024/01/31/icon.png){withd=30% }
+![](https://tinypic.host/images/2024/01/31/icon_better.png){height='180px'}
 ------------
 ### Features
 
