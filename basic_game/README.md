@@ -1,6 +1,5 @@
-![](https://tinypic.host/images/2024/01/31/icon_better.png | width=140px)
-<img src="https://tinypic.host/images/2024/01/31/icon_better.png" alt="Texto Alternativo" width="180"/>
-------------
+<img src="https://tinypic.host/images/2024/01/31/icon_better.png" width="180"/>
+
 ### Features
 
 - Implements a simple text-based game of rock, paper, scissors.
@@ -18,7 +17,7 @@
 - Terminates the game when the specified number of rounds is completed, declaring the winner.
 - Includes comments to explain the purpose of functions and provide context for certain code blocks.
 
-------------
+
 ## How run the game:
 
 Follow the next steps:
@@ -27,6 +26,6 @@ cd game
 python3 rps.py
 
 ```
-------------
+
 # View of player:
 ![](https://tinypic.host/images/2024/01/31/view.png)
