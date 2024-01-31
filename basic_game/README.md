@@ -1,4 +1,5 @@
-![](https://tinypic.host/images/2024/01/31/icon_better.png | width=140)
+![](https://tinypic.host/images/2024/01/31/icon_better.png | width=140px)
+<img src="https://tinypic.host/images/2024/01/31/icon_better.png" alt="Texto Alternativo" width="180"/>
 ------------
 ### Features
 
