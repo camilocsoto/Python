@@ -8,9 +8,9 @@
 - Support TeX (LaTeX expressions, Based on KaTeX), Flowchart and Sequence Diagram of Markdown extended syntax;
 - Support AMD/CMD (Require.js & Sea.js) Module Loader, and Custom/define editor plugins;
 
-# Editor.md
+# Python
 
-![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
+![](https://tinypic.host/images/2024/01/31/icon.png){height='180px'}
 
 ![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg) ![](https://img.shields.io/bower/v/editor.md.svg)
 
