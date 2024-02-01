@@ -1,7 +1,7 @@
 import matplotlib.pyplot as mat
 
 def generate_pie_chart(): # 
-    labels = ['a', 'b', 'c']
+    labels = ['linkin park', 'radiohead', 'interpol']
     values = [20,42,38]
     fig, ax = mat.subplots()
     ax.pie(values, labels=labels)
