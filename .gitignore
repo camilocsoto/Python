@@ -3,6 +3,7 @@
 
 #images
 .png
+app_graph/imgs/*.png
 
 ### Linux ###
 *~
@@ -57,6 +58,8 @@ Temporary Items
 __pycache__/
 *.py[cod]
 *$py.class
+app_graph/app_env/
+server/*
 
 # C extensions
 *.so
