@@ -58,8 +58,8 @@ Temporary Items
 __pycache__/
 *.py[cod]
 *$py.class
-app_graph/app_env/
-server/*
+app_graph/app_env/*
+web_server/server/*
 
 # C extensions
 *.so
