@@ -6,4 +6,4 @@ def http():
     # easy way: print(list(r))
     categories = r.json() #se parsea a los diccionarios a json
     for category in categories:
-        print(category['description'])
+        print(category['tittle'])
