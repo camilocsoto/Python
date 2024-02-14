@@ -4,5 +4,9 @@ services:
   app-csv:
     build:
       context: .
+      #crea un servicio con el nombre app-csv donde construye el archivo dockerfile
       dockerfile: Dockerfile
-        #crea un servicio con el nombre app-csv donde construye el archivo dockerfile
+    # enlaza directamente(:) todos los archivos (.) hacia la carpeta app que se 
+    # guarda el contenedor(/app)
+    volumes:
+      - .:/app
