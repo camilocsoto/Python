@@ -1,0 +1,8 @@
+# como se declara e inicia el dockerfile
+
+services:
+  app-csv:
+    build:
+      context: .
+      dockerfile: Dockerfile
+        #crea un servicio con el nombre app-csv donde construye el archivo dockerfile

@@ -1,11 +1,12 @@
 import read_csv as csv
 import extension
 import charts
+import pandas as pd
 
 # filtrar a partir de un modulo externo
 
-
 def exec():
+
   #trae toda la info en un diccionario
   data = csv.read_csv('world_population.csv')
   # trae el país a gráficar
@@ -20,10 +21,18 @@ def exec():
     keys, values_b = extension.countries(country)  
     #genera el gráfico
     charts.graph_barchart(country['Country/Territory'], keys, values_b)
+
     # * * * * pie chart * * * * * * *
+    # Forma 1: CHINGO DE MÓDULOS!!!
     labels, values = extension.world_population_pie(data)
     charts.graph_piechart(labels, values)
+    # Forma 2: PANDAS!!!
+    dataframe = pd.read_csv('world_population.csv')
+    dataframe = dataframe[dataframe['Continent'] == 'Africa'] #confuse!
 
+    countries = dataframe['Country/Territory'].values
+    percentages = dataframe['World Population Percentage'].values
+    charts.graph_piechart(countries, percentages)
 if __name__ == '__main__':
   print('starting...')
   exec()
