@@ -1,5 +1,5 @@
 services:
-  ashoka:
+  web-server-ashoka:
     build:
       context: .
       dockerfile: Dockerfile
