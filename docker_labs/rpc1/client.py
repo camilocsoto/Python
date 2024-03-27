@@ -6,12 +6,13 @@ class Client:
     def __init__(self, name, ipServerIndex):
         #Server index IP
         if(ipServerIndex==""):
-                self.indexIP='172.17.0.2'
+                self.indexIP='172.17.0.4'
         else:
                 self.indexIP=ipServerIndex
 
         self.clientsList={} #clients ips and names
         self.array_nums_hosts=[]
+        self.data={}
         self.clientIP=str(socket.gethostbyname(socket.gethostname()))
         self.name=name
 
@@ -24,7 +25,9 @@ class Client:
     def getNumsHost(self):
         s = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
         self.array_nums_hosts=s.getNumsHost()
+        
         print(self.array_nums_hosts)
+        return self.array_nums_hosts
 
     #Send messages to all client partners
     def sendMessage(self, txt):
@@ -45,6 +48,14 @@ class Client:
     def registerMe(self):
         sIndex = xmlrpc.client.ServerProxy('http://'+self.indexIP+':8000')
         sIndex.register(self.clientIP, self.name)
+    
+    def keep_data(self):
+          print(self.clientIP)
+          print(self.getNumsHost())
+          self.data[self.clientIP] = self.getNumsHost()
+          print(self.data)
+          return self.data
+          
 #----------------------------------------------------------------------------
 
 #Terminal--------------------------------------------------------------------
@@ -68,8 +79,8 @@ while(True):
                 print("bye: exit")
                 print("help: show commands and its explanation")
         elif(command=="list"):
-                client.getNumsHost()
-                print(str(client.getNumsHost))
+                client.keep_data()
+                print(client.keep_data)
         else:
                 print("command not found")     
 #----------------------------------------------------------------------------
