@@ -15,6 +15,7 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
     class ServerClient:
         def __init__(self):
             self.clientsList={}
+            self.data={}
             self.array_nums_hosts=[]
             self.messages={}
 
@@ -32,18 +33,34 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
         def updateClientsList(self, clientsList):
             self.clientsList=clientsList
             return 0
-
-        def setNumsHost(self, array_nums_hosts):
-            self.array_nums_hosts = array_nums_hosts
-            return 0
-        
-        def getNumsHost(self):
-            print(self.array_nums_hosts)
-            return self.array_nums_hosts
-
         #obtain clients list (it is to client use only)    
         def getClientsList(self):
             return self.clientsList
+        
+        #obtengo los numeros del servidor index sin la ip
+        def setNumsHost(self, array_nums_hosts):
+            self.array_nums_hosts = array_nums_hosts
+            return 0
+        #muestro los numeros del servidor index sin la ip
+        def getNumsHost(self):
+            print(self.array_nums_hosts)
+            return self.array_nums_hosts
+        
+
+        #actualizar lista de numeros del servidor con la ip y los numeros
+        def actualizar(self, data): #tengo las ip y numeros
+            self.data=data
+            print("se envia el diccionario del cliente asu servidor")
+            print(self.data)
+            return 0
+        
+        #muestro los numeros del servidor cliente con la ip y los numeros
+        def getNumsHostComplete(self):
+            print("metodo hostcomplete ")
+            print(self.data) #vacio
+            return self.data
+        
+        
     #----------------------------------------------------------------------------
     server.register_instance(ServerClient())
 
