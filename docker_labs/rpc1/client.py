@@ -1,5 +1,6 @@
 import xmlrpc.client
 import socket
+import functools
 
 #----------------------------------------------------------------------------
 class Client:
@@ -11,10 +12,11 @@ class Client:
                 self.indexIP=ipServerIndex
 
         self.clientsList={} #clients ips and names
-        self.array_nums_hosts=[]
-        self.data={}
+        self.array_nums_hosts=[] #arreglo de numeros aleatorio para cada cliente
+        self.data={} #ip y array unidos en un diccionario
         self.clientIP=str(socket.gethostbyname(socket.gethostname()))
         self.name=name
+        self.arrayClient = []#numeros del cliente respectivo
 
     #get clients list from serverClient        
     def getClientsList(self):
@@ -89,9 +91,68 @@ class Client:
     def recibir(self):
         s = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
         self.data=s.getNumsHostComplete()
+        self.obtenerArrayDeNumeros(self.data)
         print(self.data)#esta vacio
+    #----------------------------------------------------------------------------------------------------
+    def obtenerArrayDeNumeros(self, diccionary):
+        print("entro al obtener array de nums y el diccionario es:")
+        print(diccionary)
+        for key, value in diccionary.items():
+                IpClients = key
+                if self.clientIP== IpClients:        
+                        self.arrayClient = value
+        print(self.arrayClient)
+        self.negociacion(self.arrayClient, diccionary)
 
-          
+    def negociacion(self, arreglo, diccionary):
+        banderaclienteactual = False
+        banderaclienteexterno = False
+        print("entro negocion")
+        print(arreglo)
+        print("di")
+        print(diccionary)
+        for key, value in diccionary.items():
+                IpClients = key
+                print("key")
+                print(key)
+                if self.clientIP!= IpClients:   
+                        elementos_repetidos = list(filter(lambda x:  self.arrayClient.count(x) > 1, self.arrayClient))
+                        # Verificar si hay elementos repetidos comparando las longitudes
+                        if len(elementos_repetidos) >0: 
+                                banderaclienteactual = True
+
+                        arrayClienteNegocio = value
+                        print("negocio??")
+                        print(arrayClienteNegocio)
+                        elementos_repetidos = list(filter(lambda x: arrayClienteNegocio.count(x) > 1, arrayClienteNegocio))
+                        # Verificar si hay elementos repetidos comparando las longitudes
+                        if len(elementos_repetidos) >0: 
+                                banderaclienteexterno = True
+                                self.reorganizar(self, arrayClienteNegocio)
+                        
+                        if(banderaclienteactual == True and banderaclienteexterno == True ):
+                              print("ambos estan desorganizados")
+                              self.reorganizar(self.arrayClient, arrayClienteNegocio)
+                        else:
+                                print("se daño")
+#se creo metodo para guardar array de la ip 
+#se creo negociacion con los otros clientes
+#reorganiza se optiene el arreglo del clietne actual y el arreglo siguietne cliente
+    def reorganizar(self, arrayCliente, arrayNegocio):
+        #la logica de cambiar los array
+                print("ssssssssssssssssssssssss")
+                print(arrayCliente)
+                print(arrayNegocio)
+        
+                return arrayCliente, arrayNegocio
+         #index pa 
+
+    
+        
+
+     
+
+
 #----------------------------------------------------------------------------
 
 #Terminal--------------------------------------------------------------------
