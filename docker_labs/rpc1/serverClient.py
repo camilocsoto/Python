@@ -43,7 +43,6 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             return 0
         #muestro los numeros del servidor index sin la ip
         def getNumsHost(self):
-            print(self.array_nums_hosts)
             return self.array_nums_hosts
         
 
@@ -59,6 +58,27 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             print("metodo hostcomplete ")
             print(self.data) #vacio
             return self.data
+        
+        #recibe de negocioacion los arrays a reorganizar
+        def reorganizar(self, arrayCliente, arrayNegocio):
+                print("ssssssssssssssssssssssss")
+                print(arrayCliente)
+                print(arrayNegocio)
+                # se agregan los numeros faltantes de cada arreglo en las siguientes variables
+                numeros_faltantes1 = list(filter(lambda num: num not in arrayCliente, range(11)))
+                numeros_faltantes2 = list(filter(lambda num: num not in arrayNegocio, range(11)))
+                # (lambda x: arrayCliente.count(x) > 1 and x not in elementos_repetidos, arrayCliente))
+                """
+                elementos_repetidos1 = list(filter(lambda x:  arrayCliente.count(x) > 1 not in arrayCliente, range(11)))
+                elementos_repetidos2 = list(filter(lambda x:  arrayNegocio.count(x) > 1 not in arrayNegocio, range(11)))
+                aux = [x,y for (x,y): in  <]
+                """
+                print("numeros faltantes en cada array:")
+
+
+                print(numeros_faltantes1)
+                print(numeros_faltantes2)
+
         
         
     #----------------------------------------------------------------------------

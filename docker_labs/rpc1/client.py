@@ -17,6 +17,7 @@ class Client:
         self.clientIP=str(socket.gethostbyname(socket.gethostname()))
         self.name=name
         self.arrayClient = []#numeros del cliente respectivo
+        self.status = False
 
     #get clients list from serverClient        
     def getClientsList(self):
@@ -78,11 +79,6 @@ class Client:
         nums = self.getNumsHost()
         print("entro metodo para enviar datos al index")
         for key, nums in self.data.items():
-              IpClients = key
-              print("variable ip")
-              print(IpClients)
-              print("variable arreglo")
-              print(nums)
               sIndex = xmlrpc.client.ServerProxy('http://'+self.indexIP+':8000')
               sIndex.guardarDiccionario(key,nums)
 
@@ -105,47 +101,36 @@ class Client:
         self.negociacion(self.arrayClient, diccionary)
 
     def negociacion(self, arreglo, diccionary):
-        banderaclienteactual = False
-        banderaclienteexterno = False
+
         print("entro negocion")
         print(arreglo)
         print("di")
         print(diccionary)
-        for key, value in diccionary.items():
-                IpClients = key
-                print("key")
-                print(key)
-                if self.clientIP!= IpClients:   
-                        elementos_repetidos = list(filter(lambda x:  self.arrayClient.count(x) > 1, self.arrayClient))
-                        # Verificar si hay elementos repetidos comparando las longitudes
-                        if len(elementos_repetidos) >0: 
-                                banderaclienteactual = True
+        
+        elementos_repetidos = list(filter(lambda x:  self.arrayClient.count(x) > 1, self.arrayClient))
+        if (len(elementos_repetidos) ==0) :
+              print(f'el pc {self.clientIP} ya está organizado')
+              self.status = True
+        else:
+                for key, value in diccionary.items():
+                        IpClients = key
+                        print("key")
+                        print(key) 
 
-                        arrayClienteNegocio = value
-                        print("negocio??")
-                        print(arrayClienteNegocio)
-                        elementos_repetidos = list(filter(lambda x: arrayClienteNegocio.count(x) > 1, arrayClienteNegocio))
-                        # Verificar si hay elementos repetidos comparando las longitudes
-                        if len(elementos_repetidos) >0: 
-                                banderaclienteexterno = True
-                                self.reorganizar(self, arrayClienteNegocio)
-                        
-                        if(banderaclienteactual == True and banderaclienteexterno == True ):
-                              print("ambos estan desorganizados")
-                              self.reorganizar(self.arrayClient, arrayClienteNegocio)
-                        else:
-                                print("se daño")
+                        if self.clientIP!= IpClients:   
+                                # Verificar si hay elementos repetidos comparando las longitudes
+                                arrayClienteNegocio = value
+                                print("negocio??")
+                                print(arrayClienteNegocio)
+                                elementos_repetidos_otro_cliente = list(filter(lambda x: arrayClienteNegocio.count(x) > 1, arrayClienteNegocio))
+                                # Verificar si hay elementos repetidos comparando las longitudes
+                                if len(elementos_repetidos_otro_cliente) >0: 
+                                        sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
+                                        sc.reorganizar(self.arrayClient, arrayClienteNegocio)
 #se creo metodo para guardar array de la ip 
 #se creo negociacion con los otros clientes
 #reorganiza se optiene el arreglo del clietne actual y el arreglo siguietne cliente
-    def reorganizar(self, arrayCliente, arrayNegocio):
-        #la logica de cambiar los array
-                print("ssssssssssssssssssssssss")
-                print(arrayCliente)
-                print(arrayNegocio)
-        
-                return arrayCliente, arrayNegocio
-         #index pa 
+    
 
     
         
