@@ -17,7 +17,6 @@ class Client:
         self.clientIP=str(socket.gethostbyname(socket.gethostname()))
         self.name=name
         self.arrayClient = []#numeros del cliente respectivo
-        self.status = False
 
     #get clients list from serverClient        
     def getClientsList(self):
@@ -98,35 +97,67 @@ class Client:
                 if self.clientIP== IpClients:        
                         self.arrayClient = value
         print(self.arrayClient)
-        self.negociacion(self.arrayClient, diccionary)
 
-    def negociacion(self, arreglo, diccionary):
+    def ejecutarProgram(self):
+          if len(self.data) >=3:
+                print("iniciando algoritmo...")
+                self.validar_orden_cliente()
+          else:
+                print("espere a que se conecten los demás clientes...")
 
-        print("entro negocion")
-        print(arreglo)
-        print("di")
-        print(diccionary)
-        
-        elementos_repetidos = list(filter(lambda x:  self.arrayClient.count(x) > 1, self.arrayClient))
+    def validar_orden_cliente(self):
+        print("entró a validar el orden del host local"*4)
+        print("arreglo original del cliente")
+        elementos_repetidos = list(filter(lambda x:  self.arrayClient.count(x) > 1, range(11)))
+        print("nums repetidos de array -> "+ str(elementos_repetidos))
+
         if (len(elementos_repetidos) ==0) :
               print(f'el pc {self.clientIP} ya está organizado')
               self.status = True
         else:
-                for key, value in diccionary.items():
-                        IpClients = key
-                        print("key")
-                        print(key) 
+              self.negociar()
+              
 
-                        if self.clientIP!= IpClients:   
-                                # Verificar si hay elementos repetidos comparando las longitudes
-                                arrayClienteNegocio = value
-                                print("negocio??")
-                                print(arrayClienteNegocio)
-                                elementos_repetidos_otro_cliente = list(filter(lambda x: arrayClienteNegocio.count(x) > 1, arrayClienteNegocio))
-                                # Verificar si hay elementos repetidos comparando las longitudes
-                                if len(elementos_repetidos_otro_cliente) >0: 
-                                        sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
-                                        sc.reorganizar(self.arrayClient, arrayClienteNegocio)
+    def armar_diccionario(self, ip):
+        cpArrayClient = self.data[ip] #array de numeros no repetidos para el diccionario
+        repetidos = [] #array de numeros repetidos para el diccionario
+        nums_faltantes = list(filter(lambda num: num not in cpArrayClient, range(11))) # 🟢
+        #ciclo para crear lista de numeros repetidos y eliminar de la copia los repetidos.
+        while True:
+                print("CViclo whiule")
+                auxiliar =[]
+                repited_nums_temp = list(filter(lambda x:  cpArrayClient.count(x) > 1, range(11)))
+                if len(repited_nums_temp)==0:
+                      break
+                else:
+                      auxiliar.extend(repited_nums_temp)
+                      repetidos.extend(repited_nums_temp) # 🟢
+                      for num in auxiliar:
+                        if num in cpArrayClient:
+                                cpArrayClient.remove(num)
+        send_dictionary = {
+                'ip':ip,
+                'nums':cpArrayClient,
+                'nums_faltantes':nums_faltantes,
+                'nums_repetidos': repetidos
+        }
+        return send_dictionary
+
+
+    def negociar(self):
+        client1 = self.armar_diccionario(self.clientIP)
+        print(f'se armó el diccionario cliente -> {client1}')
+        for key, value in self.data.items():
+                print("ciclo feo")
+                IpClients = key
+                print("key")
+                print(key) 
+                client2 =  self.armar_diccionario(IpClients)
+                if(len(client2['nums_repetidos'])>0):
+                        print("ambos clientes deben negociar")
+                        sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
+                        sc.getClientsDictionaries(client1, client2)
+
 #se creo metodo para guardar array de la ip 
 #se creo negociacion con los otros clientes
 #reorganiza se optiene el arreglo del clietne actual y el arreglo siguietne cliente
@@ -144,6 +175,8 @@ class Client:
 client=Client(input("Client name: "), input("Index Server IP (172.17.0.2): "))
 client.registerMe()
 client.keep_data()#llamo al metodo
+client.recibir()
+client.ejecutarProgram()
 while(True):
         #client1.showReceivedMessages()
         command=input(client.name+"::. ")
