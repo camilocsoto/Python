@@ -21,6 +21,7 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             self.registeredList={} #clients ips and names
             self.data={} #diccionario para ips y numeros
             self.array_nums_hosts = list(range(11))*3
+            
 
         #Register a client
         def register(self, ip, name):

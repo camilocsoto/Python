@@ -17,6 +17,7 @@ class Client:
         self.clientIP=str(socket.gethostbyname(socket.gethostname()))
         self.name=name
         self.arrayClient = []#numeros del cliente respectivo
+        self.status = False
 
     #get clients list from serverClient        
     def getClientsList(self):
@@ -97,13 +98,17 @@ class Client:
                 if self.clientIP== IpClients:        
                         self.arrayClient = value
         print(self.arrayClient)
+        self.ejecutarProgram() # 🟠
 
     def ejecutarProgram(self):
-          if len(self.data) >=3:
+        
+          if len(self.clientsList) >=3:
                 print("iniciando algoritmo...")
                 self.validar_orden_cliente()
           else:
                 print("espere a que se conecten los demás clientes...")
+        
+          self.validar_orden_cliente()
 
     def validar_orden_cliente(self):
         print("entró a validar el orden del host local"*4)
@@ -115,7 +120,8 @@ class Client:
               print(f'el pc {self.clientIP} ya está organizado')
               self.status = True
         else:
-              self.negociar()
+                print(f'el pc {self.clientIP} no está está organizado')
+                self.negociar()
               
 
     def armar_diccionario(self, ip):
@@ -147,16 +153,30 @@ class Client:
     def negociar(self):
         client1 = self.armar_diccionario(self.clientIP)
         print(f'se armó el diccionario cliente -> {client1}')
-        for key, value in self.data.items():
+        for key in self.data.items():
                 print("ciclo feo")
                 IpClients = key
-                print("key")
-                print(key) 
+                print(f'key->{key}')
+                yield key
+                
                 client2 =  self.armar_diccionario(IpClients)
                 if(len(client2['nums_repetidos'])>0):
                         print("ambos clientes deben negociar")
                         sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
                         sc.getClientsDictionaries(client1, client2)
+                        self.reescribir()
+                        next(key)
+                else:
+                     print("ordenado")
+                     break
+
+    def reescribir(self):
+        sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
+        self.data=sc.send_new_nums() # esto no es permitido pero debo esperar a que la función deje de ser null
+        self.obtenerArrayDeNumeros(self.data)
+        self.enviodiccionarioIndex()
+        print(f'se supone que, {self.data} ya está actualizado en todos los host')#esta vacio
+        return 0
 
 #se creo metodo para guardar array de la ip 
 #se creo negociacion con los otros clientes
@@ -165,9 +185,18 @@ class Client:
 
     
         
-
      
+if __name__ == "__main__":
+      client=Client(input("Client name: "), input("Index Server IP (172.17.0.2): "))
+      client.registerMe()
+      client.keep_data()#llamo al metodo
 
+      print("empezando")
+      client.recibir()
+      
+      print("terminó")
+      print(client.data)
+"""
 
 #----------------------------------------------------------------------------
 
@@ -176,7 +205,6 @@ client=Client(input("Client name: "), input("Index Server IP (172.17.0.2): "))
 client.registerMe()
 client.keep_data()#llamo al metodo
 client.recibir()
-client.ejecutarProgram()
 while(True):
         #client1.showReceivedMessages()
         command=input(client.name+"::. ")
@@ -200,5 +228,7 @@ while(True):
         else:
                 print("command not found")     
 #----------------------------------------------------------------------------
+
+"""
 
 
