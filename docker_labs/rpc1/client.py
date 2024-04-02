@@ -1,6 +1,6 @@
 import xmlrpc.client
 import socket
-import functools
+import time
 
 #----------------------------------------------------------------------------
 class Client:
@@ -82,6 +82,8 @@ class Client:
               sIndex = xmlrpc.client.ServerProxy('http://'+self.indexIP+':8000')
               sIndex.guardarDiccionario(key,nums)
 
+
+
        
     #resivo los numeros con la ip del servidor cliente que fueron enviados por el index
     def recibir(self):
@@ -98,17 +100,20 @@ class Client:
                 if self.clientIP== IpClients:        
                         self.arrayClient = value
         print(self.arrayClient)
-        self.ejecutarProgram() # 🟠
+        #self.ejecutarProgram() # 🟠
 
     def ejecutarProgram(self):
-        
-          if len(self.clientsList) >=3:
-                print("iniciando algoritmo...")
-                self.validar_orden_cliente()
-          else:
+        print(f'self.clientsList {self.clientsList}')
+        print(f'self.data {self.data}')
+        self.getClientsList()
+        while len(self.clientsList) < 3:
                 print("espere a que se conecten los demás clientes...")
-        
-          self.validar_orden_cliente()
+                self.getClientsList()
+                time.sleep(3)
+        if len(self.clientsList) >=3:
+                print("iniciando algoritmo...")
+                self.recibir()
+                self.validar_orden_cliente()
 
     def validar_orden_cliente(self):
         print("entró a validar el orden del host local"*4)
@@ -125,7 +130,8 @@ class Client:
               
 
     def armar_diccionario(self, ip):
-        cpArrayClient = self.data[ip] #array de numeros no repetidos para el diccionario
+        cpArrayClient = self.data[ip]  #array de numeros no repetidos para el diccionario
+        print(f'cp arrayclient trae ip o array-> {cpArrayClient}')
         repetidos = [] #array de numeros repetidos para el diccionario
         nums_faltantes = list(filter(lambda num: num not in cpArrayClient, range(11))) # 🟢
         #ciclo para crear lista de numeros repetidos y eliminar de la copia los repetidos.
@@ -149,40 +155,49 @@ class Client:
         }
         return send_dictionary
 
-
+        # 2 host que deben cambiar sus numeros hasta que no estén repetidos,,creo que esta funcion debe ser asincronica
     def negociar(self):
+
         client1 = self.armar_diccionario(self.clientIP)
         print(f'se armó el diccionario cliente -> {client1}')
-        for key in self.data.items():
-                print("ciclo feo")
+        for key in self.data:
+                print("entró de nuevo a negociar con una nueva ip :'D")
                 IpClients = key
-                print(f'key->{key}')
-                yield key
+                print(f'key->{IpClients}.')
                 
                 client2 =  self.armar_diccionario(IpClients)
                 if(len(client2['nums_repetidos'])>0):
                         print("ambos clientes deben negociar")
                         sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
-                        sc.getClientsDictionaries(client1, client2)
+                        sc.getClientsDictionaries(client1, client2) #func de otro archivo
+                        print("antes del sleep :v")
+                        time.sleep(0.3)
+                        print("después del sleep :v")
                         self.reescribir()
-                        next(key)
                 else:
                      print("ordenado")
-                     break
 
     def reescribir(self):
+        print("entró a reescribir")
         sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
-        self.data=sc.send_new_nums() # esto no es permitido pero debo esperar a que la función deje de ser null
-        self.obtenerArrayDeNumeros(self.data)
-        self.enviodiccionarioIndex()
+        
+        print(f'self.data() antes de instanciarse {self.data}')
+        self.data=sc.send_new_nums() # en el otro archivo: se reorganizan los diccionarios client1 y client2, y se actualiza el principal self.data
+        print(f'self.data() antes de instanciarse {self.data}')
+        self.envioNuevodiccionarioIndex() #actualiza en todos los clientes el diccionario.
+        time.sleep(0.3)
+        self.obtenerArrayDeNumeros(self.data) # toma el array cuya ip coincida con la del diccionario.
         print(f'se supone que, {self.data} ya está actualizado en todos los host')#esta vacio
         return 0
-
-#se creo metodo para guardar array de la ip 
-#se creo negociacion con los otros clientes
-#reorganiza se optiene el arreglo del clietne actual y el arreglo siguietne cliente
+        #una vez termine de ejecutarse las 3 lineas, necesito que vuelva a donde estaba, en negociar, cuando se llamó la función reescribir
     
-
+    #Envio el diccionario con su ip y numeros al index para que los almacene
+    def envioNuevodiccionarioIndex(self):
+        nums = self.data
+        print("tras el intercambio... se va a actualizar en todos los clientes ")
+        for key, nums in self.data.items():
+              sIndex = xmlrpc.client.ServerProxy('http://'+self.indexIP+':8000')
+              sIndex.guardarDiccionario(key,nums)
     
         
      
@@ -190,12 +205,8 @@ if __name__ == "__main__":
       client=Client(input("Client name: "), input("Index Server IP (172.17.0.2): "))
       client.registerMe()
       client.keep_data()#llamo al metodo
-
+      client.ejecutarProgram()
       print("empezando")
-      client.recibir()
-      
-      print("terminó")
-      print(client.data)
 """
 
 #----------------------------------------------------------------------------

@@ -63,6 +63,7 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             print("entró al serverClient y recibió los diccionarios.")
             print(f'antes -> client1_{client1} y client2_{client2}')
             self.negociar_numeros(client1, client2)
+            return 0
             
         def negociar_numeros(self, client1, client2):
             common_nums = set(client1['nums_faltantes']).intersection(client2['nums_repetidos'])
@@ -82,6 +83,7 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             self.actualizar_nuevos_numeros(client1, client2)
         
         def actualizar_nuevos_numeros(self, client1, client2):
+           print("actualizó numa en self.data")
            for ip in self.data:
             if client1['ip']== ip:
                 self.data[ip] = self.data[ip].extend(client1['nums'])
@@ -92,10 +94,12 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             #borrar datos de los diccionarios
             client1 = {}
             client2 ={}
-            self.send_new_nums()
+            print("terminó de actualizar")
             return 0
 
         def send_new_nums(self):
+            print("el metodo reescribir se está ejecutando y solcito la función send_new_nums")
+            print(self.data)
             return self.data
             
             
