@@ -83,23 +83,33 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             self.actualizar_nuevos_numeros(client1, client2)
         
         def actualizar_nuevos_numeros(self, client1, client2):
-           print("actualizó numa en self.data")
-           for ip in self.data:
-            if client1['ip']== ip:
-                self.data[ip] = self.data[ip].extend(client1['nums'])
-                self.array_nums_hosts= client1['nums']
-            elif client2['ip']== ip:
-                self.data[ip] = self.data[ip].extend(client2['nums'])
-                #enviar al otro cliente su nuevo array.
-            #borrar datos de los diccionarios
+            print("actualizará numa en self.data")
+            for ip in self.data:
+                if client1['ip'] == ip:
+                    self.array_nums_hosts = client1['nums']
+                    print(f'diccionario data se actializó en su ip {ip}, y terminó con el array: {self.data[ip]}')
+                elif client2['ip'] == ip:
+                    print(f'diccionario data se actializó en su ip {ip}, y terminó con el array: {self.data[ip]}')
+                    # enviar al otro cliente su nuevo array.
+            # borrar datos de los diccionarios
             client1 = {}
-            client2 ={}
+            client2 = {}
             print("terminó de actualizar")
             return 0
 
         def send_new_nums(self):
             print("el metodo reescribir se está ejecutando y solcito la función send_new_nums")
             print(self.data)
+            return self.data
+        
+        def guardarNuevoDiccionario(self, newData):
+            print("se guarda el nuevo diccionario en todos los hosts.")
+            self.data = newData
+            self.enviarClient()
+            return 0
+        
+        def enviarClient(self):
+            print("se actualiza a todos los clients desde servClient")
             return self.data
             
             

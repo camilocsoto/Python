@@ -109,10 +109,10 @@ class Client:
         while len(self.clientsList) < 3:
                 print("espere a que se conecten los demás clientes...")
                 self.getClientsList()
-                time.sleep(3)
+                time.sleep(1)
         if len(self.clientsList) >=3:
                 print("iniciando algoritmo...")
-                self.recibir()
+                self.recibirDiccionarioDesdeCliente()
                 self.validar_orden_cliente()
 
     def validar_orden_cliente(self):
@@ -174,8 +174,8 @@ class Client:
                         time.sleep(0.3)
                         print("después del sleep :v")
                         self.reescribir()
-                else:
-                     print("ordenado")
+        self.validar_orden_cliente()
+        
 
     def reescribir(self):
         print("entró a reescribir")
@@ -184,21 +184,27 @@ class Client:
         print(f'self.data() antes de instanciarse {self.data}')
         self.data=sc.send_new_nums() # en el otro archivo: se reorganizan los diccionarios client1 y client2, y se actualiza el principal self.data
         print(f'self.data() antes de instanciarse {self.data}')
-        self.envioNuevodiccionarioIndex() #actualiza en todos los clientes el diccionario.
+        self.envioNuevodiccionario() #actualiza en todos los clientes el diccionario.
         time.sleep(0.3)
-        self.obtenerArrayDeNumeros(self.data) # toma el array cuya ip coincida con la del diccionario.
+        #recibe
+        self.recibirDiccionarioDesdeCliente
         print(f'se supone que, {self.data} ya está actualizado en todos los host')#esta vacio
         return 0
         #una vez termine de ejecutarse las 3 lineas, necesito que vuelva a donde estaba, en negociar, cuando se llamó la función reescribir
     
     #Envio el diccionario con su ip y numeros al index para que los almacene
-    def envioNuevodiccionarioIndex(self):
-        nums = self.data
+    def envioNuevodiccionario(self):
         print("tras el intercambio... se va a actualizar en todos los clientes ")
-        for key, nums in self.data.items():
-              sIndex = xmlrpc.client.ServerProxy('http://'+self.indexIP+':8000')
-              sIndex.guardarDiccionario(key,nums)
+        for key in self.data:
+              otherIP = key
+              sc = xmlrpc.client.ServerProxy('http://'+otherIP+':8000')
+              sc.guardarNuevoDiccionario(self.data)
     
+    def recibirDiccionarioDesdeCliente(self):
+        sc = xmlrpc.client.ServerProxy('http://'+self.clientIP+':8000')
+        self.data=sc.enviarClient()
+        self.obtenerArrayDeNumeros(self.data)
+
         
      
 if __name__ == "__main__":
