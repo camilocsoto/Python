@@ -63,28 +63,54 @@ with SimpleXMLRPCServer((hostIP, 8000), requestHandler=RequestHandler) as server
             self.negociar_numeros(client1, client2)
             return 0
             
-        def negociar_numeros(self, client1, client2):
-            common_nums = set(client1['nums_faltantes']).intersection(client2['nums_repetidos'])
-            for num in common_nums:
-                client1['nums'].append(num)
+        def negociar_numeros(self, client1, client2):                    
+            change1 = []
+            change2 = []
+            # Crear lista change1
+            for num in client1['nums_faltantes']:
+                if num in client2['nums_repetidos']:
+                    change1.append(num)
+            # Crear lista change2
+            for num in client2['nums_faltantes']:
+                if num in client1['nums_repetidos']:
+                    change2.append(num)
+            # Ajustar longitudes de change1 y change2
+            if len(change1) > len(change2):
+                change1 = change1[:len(change2)]
+            elif len(change2) > len(change1):
+                change2 = change2[:len(change1)]
+            
+            print(f"puede negociarse los numeros {change1} y {change2}")
+            
+            # Aplicar cambios a los diccionarios
+            for num in change1:
+                client1['nums_repetidos'].append(num)
                 client1['nums_faltantes'].remove(num)
                 client2['nums_repetidos'].remove(num)
-                    
-            common_nums = set(client2['nums_faltantes']).intersection(client1['nums_repetidos'])
-            for num in common_nums:
-                client2['nums'].append(num)
+            change1 = [] # dejar limpio el change para la siguiente negociación
+            
+            for num in change2:
+                client2['nums_repetidos'].append(num)
                 client2['nums_faltantes'].remove(num)
                 client1['nums_repetidos'].remove(num)
+            change2 = [] # dejar limpio el change para la siguiente negociación
+                
+            client1['nums'].extend(client1['nums_repetidos']) # debería quedar completito
+            client2['nums'].extend(client2['nums_repetidos']) # debería quedar completito
             
-            # Si quedan números en 'nums_repetidos', se añaden a 'nums'
-            client1['nums'].extend(client1['nums_repetidos'])
-            client2['nums'].extend(client2['nums_repetidos'])
-                    
-            print(f'después -> client1_{client1} y client2_{client2}')
+            
+            # Verificar longitudes
+            if len(client1['nums'])  == 11 and len(client2['nums'])  == 11:
+                print(f'Después -> client1: {client1} y client2: {client2}')
+            else:
+                print(f"no están completos :/ -> client1: {client1} y client2: {client2}")
+            
             self.actualizar_nuevos_numeros(client1, client2)
-        
+                            
         def actualizar_nuevos_numeros(self, client1, client2):
+            print("actualizará numa en .data")
             if client1['ip'] in self.data:
+
                 self.data[client1['ip']] = client1['nums']
                 print(f'diccionario data se actializó en su ip {client1["ip"]}, y terminó con el array: {self.data[client1["ip"]]}')
             if client2['ip'] in self.data:
