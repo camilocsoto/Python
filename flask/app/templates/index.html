@@ -6,13 +6,20 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>calculadora</h1>
-    <form action="{{url_for('getData')}}" method="post" autocomplete="off">
-        <input type="text" name="num1">
-        <input type="text" name="num2">
-        <input type="submit" value="Calcular">
-    </form>
-    
-    <p>{{data}}</p>
+    <h1>TIENDA DE MUEBLES</h1>
+    <div>
+        <h1>Tienda</h1>
+        <h2>Solicitar lista de productos disponibles</h2>
+        <form action="{{ url_for('obtener_tienda') }}" method="post" autocomplete="off">
+            <input type="submit" value="Tienda">
+        </form>     
+    </div>    
+    <div>
+        <h1>Tienda</h1>
+        <h2>Solicitar lista de productos disponibles</h2>
+        <form action="{{ url_for('agregar_nuevo_producto') }}" method="post" autocomplete="off">
+            <input type="submit" value="Añadir">
+        </form>     
+    </div>    
 </body>
 </html>

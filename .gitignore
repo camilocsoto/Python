@@ -181,11 +181,14 @@ celerybeat.pid
 .env
 .venv
 env/
+app_env/
+charts/
+app_graph/imgs/
 venv/
 ENV/
 env.bak/
 venv.bak/
-
+web-server/server/
 # Spyder project settings
 .spyderproject
 .spyproject
