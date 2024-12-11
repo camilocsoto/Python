@@ -16,7 +16,7 @@ def recursive_factorial(n):
     return n*(recursive_factorial(n-1))
 
 if __name__ == "__main__":
-    n = 1000
+    n = 10
     # iterativo
     start_time =time.time()
     print(factorial(n))

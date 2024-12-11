@@ -1,3 +1,14 @@
+
+def main():
+    a=0.001
+    if a > 0:
+        return True
+    else:
+        return False
+    
+if __name__ == "__main__":
+    print(main())
+"""
 #read the problem right here: 
 scanner = input("digita la cantidad de participantes:")
 p = int(scanner)
@@ -14,3 +25,4 @@ while p > 1:
         games =games + p
 print(games)
 
+"""
