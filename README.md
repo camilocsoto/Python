@@ -1,6 +1,6 @@
-### Features
+### Collection of educational projects I've gotta study if I wanna remember how programm this interesting things.
 
-- Support Standard Markdown / CommonMark and GFM(GitHub Flavored Markdown);
+- Collection of the different types of algorithms. Now I need to know know works and when they should be used.
 - Full-featured: Real-time Preview, Image (cross-domain) upload, Preformatted text/Code blocks/Tables insert, Code fold, Search replace, Read only, Themes, Multi-languages, L18n, HTML entities, Code syntax highlighting...;
 - Markdown Extras : Support ToC (Table of Contents), Emoji, Task lists, @Links...;
 - Compatible with all major browsers (IE8+), compatible Zepto.js and iPad;
