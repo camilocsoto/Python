@@ -4,7 +4,7 @@ class Book():
         self.author =author
         self.is_avaliable = True
         
-    def borrow(self): #prestar
+    def borrow(self): #prestado antes.
         if self.is_avaliable:
             self.is_avaliable = False
             return f"the book {self.title} has been borrow"
@@ -13,3 +13,4 @@ class Book():
         
     def return_book(self):
         self.is_avaliable = True
+        print(f"the book {self.title} has been returned")
