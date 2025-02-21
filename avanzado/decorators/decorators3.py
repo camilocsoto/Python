@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 """
-@staticmethod: inmutable: no accede o modifica la info de esa clase.
-@classmethod: el method puede modificar la clase
-@property: Ejecutar un method como un atributo
+@staticmethod: no altera la clase ni el objeto, solo es invocable.
+@classmethod: el method puede modificar la clase, no un objeto en particular.
+@property: Ejecutar un method como un atributo, no recibe argumentos y es un getter-setter
 """
 
 class Calculator:
