@@ -1,58 +1,51 @@
+from typing import Optional, List
+from dataclasses import dataclass, field
 import functools as fc
 import random
+
+@dataclass    
 class Array():
     """ 
     Array vs ArrayLists
     son listas... pero las listas no son arrays.
     no ocupan mucho espacio en la ram.
     los arrays son más estáticos, solo puedeen:
-    -crearse
-    -medir su longitud.
-    -represtarse en strings
-    -pertenencia
-    -índices
-    - reemplazos
+    -crearse, medir su longitud, pertenencia, índices
     """
-    def __init__(self, sizes, fill_values=None):
-        self.items =list()
-        #create the values from the size
-        for _ in range(sizes):
-            self.items.append(fill_values)
+    sizes:int
+    fill_values:Optional[int] =None
+    item:List[Optional[int]] = field(default_factory=list)
     
-    def __len__(self): #a convention to private methods 
-        return len(self.items)
+    def __post_init__(self)-> None:
+        self.item= [self.fill_values for _ in range(self.sizes)]
+    
+    def __len__(self)->int:
+        return len(self.item)
     
     def __str__(self):
-        return str(self.items)
+        return str(self.item)
     
     def __iter__(self):
-        return iter(self.items)
+        return iter(self.item)
     
-    def __getitem__(self, index):
-        return self.items[index]
-    
-    def __setitem__(self, index, value):
-        self.items[index] = value
-        return self.items[index]
+    def __getitem__(self, index)->List[int]:
+        return self.item[index]
+        
+    def __setitem__(self, index, value)->int:
+        self.item[index] = value
+        return self.item[index]
     
     def __generate__(self):
-        for i in range(len(self.items)):
-            self.items[i-1] = random.randint(1,100)
-        return self.items
-    
-    def __sum__(self):
-        reduced = fc.reduce(lambda x,y : x+y, self.items)
-        return reduced
-    
+        self.item = [random.randint(1,100) for _ in range(self.sizes)]
+        return self.item
+            
+    def __sum__(self) -> int:
+        valid_therms = [x for x in self.item if x is not None]
+        return fc.reduce(lambda x, y: x+y, valid_therms)
+
 if __name__=="__main__":
     menu = Array(3)
     print(menu.__len__())
     print(menu.__generate__())
     print(menu.__sum__())
     print(menu.__setitem__(0, "2"))
-
-    
-    
-    
-    
-    
