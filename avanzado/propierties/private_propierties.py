@@ -24,17 +24,17 @@ print(base._protected_propierty)
 @dataclass
 class BankAccount():
     _money:float = 0.0
-    __transactions:List[str] = field(default_factory=list)
+    _transactions:List[str] = field(default_factory=list)
     
     # Método privado para registrar transacciones
     def __deposit(self, amount: float):
-        self.__transactions.append(f"Deposited {amount}")
+        self._transactions.append(f"Deposited {amount}")
 
     # Método protegido para actualizar el saldo
     def _update_money(self, amount: float):
         self._money += amount
         self.__deposit(amount)
-        return f"money updated {self._money} & transactions {self.__transactions}"
+        return f"money updated {self._money} & transactions {self._transactions}"
 
 # Uso:
 account = BankAccount()
