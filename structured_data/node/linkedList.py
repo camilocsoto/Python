@@ -96,13 +96,27 @@ class ChainNode:
             actual.next = None
             return
         
-        penultimate_planet:Node = actual.next
+        while actual.next is not None and actual.next.next is not None:
+            actual = actual.next 
+            # arrive at the penult node
+        actual.next = None # erase last node.
         
-        while penultimate_planet.next is not None:
-            actual = penultimate_planet
-            # arrive at the end of the chain
-        actual.next = None
-        
+    def delete_target(self, target:str):
+        actual =self.head
+        if actual is None:
+            raise Exception("chain is empty, use add_beggin first!")        
+        if actual.value == target: # head is the 1° target
+            self.delete_begin() 
+            
+        while actual is not None and actual.next is not None:
+            if actual is not None and actual.next.value == target:
+                to_delete = actual.next
+                actual.next = to_delete.next
+                to_delete.next = None
+                print(f"{to_delete.value} has been destroyed!")
+                break
+            else:
+                actual = actual.next #  errror= "next" is not a known attribute of "None"Pylanc   
         
 
 if __name__=="__main__":
@@ -113,9 +127,12 @@ if __name__=="__main__":
     empire.add_begin(Node("Corusant"))
     empire.add_end(Node("Naboo"))
     empire.add_begin(Node("Mandalor"))
+    empire.add_middle(type_add='before_node', oldNode=Alderahan, neoNode=Node("Pantora"))
+    empire.add_middle(type_add='after_node', oldNode=Alderahan, neoNode=Node("Yavin IV"))
+    empire.traverseChain()
     empire.delete_begin()
     empire.delete_end()
-    empire.add_middle(type_add='before_node', oldNode=Alderahan, neoNode=Node("Pantora"))
+    empire.delete_target('Yavin IV')
     empire.traverseChain()  
     
     
