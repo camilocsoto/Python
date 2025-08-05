@@ -1,13 +1,16 @@
-# qué es object como argumento de None
-# la clase doubleLinkedList hereda de Node?
-# no entiendo nada del constructor de la clase Node
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
 class Node():
-    def __init__(self, data, previous = None, next =None):
-        self.data = data
-        self.previous = previous
-        self.next = next #for the first Node
-        
+    data:str
+    next:Optional['Node'] = None
+    prev:Optional['Node'] = None
+    
+@dataclass
 class DoubleLink():
+    head:Optional['Node'] = None
+    
     def __init__(self):
         self.head = None
         self.tail = None

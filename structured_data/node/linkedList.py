@@ -116,7 +116,7 @@ class ChainNode:
                 print(f"{to_delete.value} has been destroyed!")
                 break
             else:
-                actual = actual.next #  errror= "next" is not a known attribute of "None"Pylanc   
+                actual = actual.next
         
 
 if __name__=="__main__":
